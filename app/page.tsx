@@ -1,7 +1,5 @@
-'use client';
-
+"use client";
 import React from 'react';
-import { motion } from 'framer-motion';
 import { 
   Tv, Play, Film, Music, Podcast, Radio, 
   Star, Calendar, TrendingUp, Search, Heart, 
@@ -60,7 +58,7 @@ export default function JavariEntertainmentPage() {
       {/* Hero */}
       <section className="pt-32 pb-20 px-4">
         <div className="max-w-7xl mx-auto text-center">
-          <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }}>
+          <div}}>
             <span className="inline-flex items-center gap-2 bg-purple-500/20 text-purple-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
               <Play className="w-4 h-4" /> Your AI Entertainment Guide
             </span>
@@ -94,7 +92,7 @@ export default function JavariEntertainmentPage() {
                 </span>
               ))}
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -103,15 +101,15 @@ export default function JavariEntertainmentPage() {
         <div className="max-w-7xl mx-auto">
           <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
             {categories.map((cat) => (
-              <motion.div
+              <div
                 key={cat.name}
-                whileHover={{ scale: 1.05 }}
+}
                 className="bg-slate-800 p-6 rounded-xl border border-slate-700 text-center hover:border-purple-500 cursor-pointer"
               >
                 <cat.icon className="w-8 h-8 text-purple-500 mx-auto mb-3" />
                 <h3 className="text-white font-semibold">{cat.name}</h3>
                 <p className="text-slate-500 text-sm">{cat.count}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
@@ -131,12 +129,12 @@ export default function JavariEntertainmentPage() {
           
           <div className="grid md:grid-cols-3 gap-8">
             {features.map((feature, i) => (
-              <motion.div
+              <div
                 key={feature.title}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                transition={{ delay: i * 0.1 }}
-                viewport={{ once: true }}
+}
+}
+}
+}
                 className="bg-slate-800 p-6 rounded-xl border border-slate-700"
               >
                 <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4">
@@ -144,7 +142,7 @@ export default function JavariEntertainmentPage() {
                 </div>
                 <h3 className="text-xl font-semibold text-white mb-2">{feature.title}</h3>
                 <p className="text-slate-400">{feature.description}</p>
-              </motion.div>
+              </div>
             ))}
           </div>
         </div>
