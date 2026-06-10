@@ -1,198 +1,134 @@
 "use client";
-import React from 'react';
-import { 
-  Tv, Play, Film, Music, Podcast, Radio, 
-  Star, Calendar, TrendingUp, Search, Heart, 
-  Monitor, Smartphone, Gamepad2, ArrowRight, Check
-} from 'lucide-react';
+// app/page.tsx — Javari Entertainment Hub
+// Turbopack-safe: inline styles only, no framer-motion, no Tailwind
+// CR AudioViz AI · EIN 39-3646201 · June 2026
+import { useState } from "react";
 
-const features = [
-  { icon: Search, title: 'Universal Search', description: 'Find any show or movie across all streaming services' },
-  { icon: Calendar, title: 'Release Calendar', description: 'Never miss a premiere with personalized alerts' },
-  { icon: Heart, title: 'Watchlist Manager', description: 'Organize what you want to watch across all platforms' },
-  { icon: TrendingUp, title: 'Trending Now', description: 'See what\'s popular on every streaming service' },
-  { icon: Star, title: 'AI Recommendations', description: 'Get personalized picks based on your taste' },
-  { icon: Monitor, title: 'Where to Watch', description: 'Instantly find which service has your content' },
+const FEATURES = [
+  { icon:"🔍", title:"Universal Search",     desc:"Find any show or movie across all streaming services instantly" },
+  { icon:"📅", title:"Release Calendar",      desc:"Never miss a premiere — track upcoming releases from every network" },
+  { icon:"🎭", title:"AI Recommendations",    desc:"Javari AI learns your taste and suggests what you'll love next" },
+  { icon:"📱", title:"All Your Platforms",    desc:"Netflix, Hulu, Disney+, HBO Max, Prime Video and more in one place" },
+  { icon:"⭐", title:"Ratings & Reviews",     desc:"Aggregated critic and audience scores so you always pick a winner" },
+  { icon:"🎮", title:"Gaming Content",        desc:"Game trailers, reviews, and streaming content all in one hub" },
 ];
 
-const streamingServices = [
-  'Netflix', 'Disney+', 'HBO Max', 'Amazon Prime', 'Hulu', 
-  'Apple TV+', 'Peacock', 'Paramount+', 'YouTube TV', 'Spotify'
-];
+const CATEGORIES = ["Movies","TV Shows","Anime","Documentaries","Sports","Music","Podcasts","Gaming"];
 
-const categories = [
-  { icon: Film, name: 'Movies', count: '500K+' },
-  { icon: Tv, name: 'TV Shows', count: '100K+' },
-  { icon: Music, name: 'Music', count: '100M+' },
-  { icon: Podcast, name: 'Podcasts', count: '5M+' },
-  { icon: Gamepad2, name: 'Gaming', count: '50K+' },
-  { icon: Radio, name: 'Live TV', count: '500+' },
-];
+export default function EntertainmentPage() {
+  const [search, setSearch] = useState("");
+  const [activeTab, setActiveTab] = useState("Movies");
 
-export default function JavariEntertainmentPage() {
   return (
-    <div className="min-h-screen bg-gradient-to-b from-slate-900 to-slate-800">
-      {/* Navigation */}
-      <nav className="fixed top-0 w-full bg-slate-900/90 backdrop-blur-md z-50 border-b border-slate-700">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="flex justify-between items-center h-16">
-            <div className="flex items-center gap-2">
-              <Tv className="w-8 h-8 text-purple-500" />
-              <span className="text-xl font-bold text-white">Javari Entertainment</span>
-            </div>
-            <div className="hidden md:flex items-center gap-8">
-              <a href="#features" className="text-slate-300 hover:text-white">Features</a>
-              <a href="#services" className="text-slate-300 hover:text-white">Services</a>
-              <a href="#pricing" className="text-slate-300 hover:text-white">Pricing</a>
-            </div>
-            <div className="flex items-center gap-4">
-              <a href="/login" className="text-slate-300 hover:text-white">Sign In</a>
-              <a href="/signup" className="bg-purple-600 text-white px-4 py-2 rounded-lg hover:bg-purple-700">
-                Get Started
-              </a>
-            </div>
+    <div style={{minHeight:"100vh",background:"linear-gradient(180deg,#0d1117 0%,#161b22 100%)",
+      color:"#e2e8f0",fontFamily:"system-ui,sans-serif"}}>
+
+      {/* Nav */}
+      <nav style={{position:"sticky",top:0,zIndex:100,
+        background:"rgba(13,17,23,0.95)",backdropFilter:"blur(12px)",
+        borderBottom:"1px solid rgba(255,255,255,0.06)",padding:"0 24px"}}>
+        <div style={{maxWidth:1200,margin:"0 auto",height:60,
+          display:"flex",alignItems:"center",justifyContent:"space-between"}}>
+          <div style={{display:"flex",alignItems:"center",gap:10}}>
+            <span style={{fontSize:22}}>🎬</span>
+            <span style={{fontSize:16,fontWeight:800,color:"#fff"}}>Javari Entertainment</span>
+          </div>
+          <div style={{display:"flex",gap:8}}>
+            <a href="https://craudiovizai.com/auth/signin" style={{
+              background:"rgba(255,255,255,0.06)",color:"#e2e8f0",textDecoration:"none",
+              padding:"7px 16px",borderRadius:8,fontSize:13,fontWeight:600,
+              border:"1px solid rgba(255,255,255,0.1)"}}>Sign In</a>
+            <a href="https://craudiovizai.com/auth/signup" style={{
+              background:"linear-gradient(135deg,#8B5CF6,#00B4D8)",color:"#fff",
+              textDecoration:"none",padding:"7px 16px",borderRadius:8,
+              fontSize:13,fontWeight:700}}>Start Free</a>
           </div>
         </div>
       </nav>
 
       {/* Hero */}
-      <section className="pt-32 pb-20 px-4">
-        <div className="max-w-7xl mx-auto text-center">
-          <div}}>
-            <span className="inline-flex items-center gap-2 bg-purple-500/20 text-purple-400 px-4 py-2 rounded-full text-sm font-medium mb-6">
-              <Play className="w-4 h-4" /> Your AI Entertainment Guide
-            </span>
-            <h1 className="text-5xl md:text-6xl font-bold text-white mb-6">
-              All Your Entertainment.<br />
-              <span className="text-purple-500">One Smart Hub.</span>
-            </h1>
-            <p className="text-xl text-slate-400 mb-8 max-w-2xl mx-auto">
-              Javari Entertainment unifies streaming services, finds what to watch, 
-              and helps you discover your next favorite show.
-            </p>
-            
-            {/* Search */}
-            <div className="max-w-2xl mx-auto mb-8">
-              <div className="relative">
-                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-500" />
-                <input
-                  type="text"
-                  placeholder="Search movies, shows, music, podcasts..."
-                  className="w-full pl-12 pr-4 py-4 bg-slate-800 border border-slate-700 rounded-xl text-white placeholder-slate-500 focus:border-purple-500 outline-none"
-                />
-              </div>
-            </div>
-
-            {/* Streaming Services */}
-            <p className="text-sm text-slate-500 mb-4">Works with:</p>
-            <div className="flex flex-wrap justify-center gap-3">
-              {streamingServices.map((service) => (
-                <span key={service} className="px-4 py-2 bg-slate-800 border border-slate-700 rounded-lg text-slate-400 text-sm">
-                  {service}
-                </span>
-              ))}
-            </div>
-          </div>
+      <section style={{maxWidth:900,margin:"0 auto",padding:"80px 24px 60px",textAlign:"center"}}>
+        <div style={{fontSize:"clamp(32px,6vw,60px)",fontWeight:900,lineHeight:1.15,
+          margin:"0 0 20px",background:"linear-gradient(135deg,#fff,#8B5CF6,#00B4D8)",
+          WebkitBackgroundClip:"text",WebkitTextFillColor:"transparent"}}>
+          All Your Entertainment.<br/>One Intelligent Hub.
         </div>
+        <p style={{fontSize:18,color:"#9CA3AF",maxWidth:560,margin:"0 auto 36px",lineHeight:1.7}}>
+          Javari AI tracks every streaming service, suggests what you'll love,
+          and keeps you ahead of every release.
+        </p>
+        {/* Search */}
+        <div style={{display:"flex",gap:10,maxWidth:560,margin:"0 auto 16px",flexWrap:"wrap"}}>
+          <input value={search} onChange={e=>setSearch(e.target.value)}
+            placeholder="Search movies, shows, actors..."
+            style={{flex:1,minWidth:200,background:"rgba(255,255,255,0.06)",
+              border:"1px solid rgba(255,255,255,0.1)",borderRadius:12,
+              padding:"14px 18px",color:"#e2e8f0",fontSize:15,
+              fontFamily:"system-ui",outline:"none"}}/>
+          <button style={{background:"linear-gradient(135deg,#8B5CF6,#00B4D8)",
+            color:"#fff",border:"none",borderRadius:12,padding:"14px 24px",
+            fontSize:15,fontWeight:700,cursor:"pointer",fontFamily:"system-ui"}}>
+            Search 🔍
+          </button>
+        </div>
+        <p style={{fontSize:13,color:"#4B5563"}}>
+          Powered by Javari AI · CR AudioViz AI · EIN 39-3646201
+        </p>
       </section>
 
-      {/* Categories */}
-      <section className="py-16 px-4">
-        <div className="max-w-7xl mx-auto">
-          <div className="grid grid-cols-2 md:grid-cols-6 gap-4">
-            {categories.map((cat) => (
-              <div
-                key={cat.name}
-}
-                className="bg-slate-800 p-6 rounded-xl border border-slate-700 text-center hover:border-purple-500 cursor-pointer"
-              >
-                <cat.icon className="w-8 h-8 text-purple-500 mx-auto mb-3" />
-                <h3 className="text-white font-semibold">{cat.name}</h3>
-                <p className="text-slate-500 text-sm">{cat.count}</p>
-              </div>
-            ))}
+      {/* Category tabs */}
+      <section style={{maxWidth:900,margin:"0 auto",padding:"0 24px 40px"}}>
+        <div style={{display:"flex",gap:8,flexWrap:"wrap",justifyContent:"center",marginBottom:24}}>
+          {CATEGORIES.map(c=>(
+            <button key={c} onClick={()=>setActiveTab(c)}
+              style={{background:activeTab===c?"rgba(139,92,246,0.2)":"rgba(255,255,255,0.04)",
+                border:`1px solid ${activeTab===c?"#8B5CF6":"rgba(255,255,255,0.08)"}`,
+                color:activeTab===c?"#A78BFA":"#9CA3AF",borderRadius:20,
+                padding:"8px 18px",cursor:"pointer",fontSize:14,
+                fontWeight:activeTab===c?700:400,fontFamily:"system-ui"}}>
+              {c}
+            </button>
+          ))}
+        </div>
+        <div style={{background:"rgba(255,255,255,0.02)",border:"1px solid rgba(255,255,255,0.06)",
+          borderRadius:16,padding:32,textAlign:"center"}}>
+          <div style={{fontSize:32,marginBottom:12}}>🎬</div>
+          <div style={{fontSize:16,fontWeight:700,color:"#fff",marginBottom:8}}>{activeTab}</div>
+          <div style={{fontSize:14,color:"#6B7280",marginBottom:20}}>
+            Sign in to browse {activeTab.toLowerCase()} from all your streaming services.
           </div>
+          <a href="https://craudiovizai.com/auth/signup" style={{
+            display:"inline-block",background:"linear-gradient(135deg,#8B5CF6,#00B4D8)",
+            color:"#fff",textDecoration:"none",padding:"12px 28px",borderRadius:10,
+            fontSize:14,fontWeight:700}}>
+            Start Free →
+          </a>
         </div>
       </section>
 
       {/* Features */}
-      <section id="features" className="py-20 px-4 bg-slate-800/50">
-        <div className="max-w-7xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">
-              Smart Features for Smart Viewers
-            </h2>
-            <p className="text-xl text-slate-400">
-              AI-powered tools to enhance your entertainment experience.
-            </p>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {features.map((feature, i) => (
-              <div
-                key={feature.title}
-}
-}
-}
-}
-                className="bg-slate-800 p-6 rounded-xl border border-slate-700"
-              >
-                <div className="w-12 h-12 bg-purple-500/20 rounded-lg flex items-center justify-center mb-4">
-                  <feature.icon className="w-6 h-6 text-purple-500" />
-                </div>
-                <h3 className="text-xl font-semibold text-white mb-2">{feature.title}</h3>
-                <p className="text-slate-400">{feature.description}</p>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Pricing */}
-      <section id="pricing" className="py-20 px-4">
-        <div className="max-w-5xl mx-auto">
-          <div className="text-center mb-16">
-            <h2 className="text-3xl md:text-4xl font-bold text-white mb-4">Simple Pricing</h2>
-          </div>
-          
-          <div className="grid md:grid-cols-3 gap-8">
-            {[
-              { name: 'Free', price: '$0', features: ['Basic search', '5 watchlist items', 'Limited recommendations'] },
-              { name: 'Plus', price: '$4.99', features: ['Unlimited search', 'Unlimited watchlist', 'AI recommendations', 'Release alerts', 'Ad-free'], popular: true },
-              { name: 'Family', price: '$9.99', features: ['Everything in Plus', '6 profiles', 'Parental controls', 'Shared watchlists', 'Priority support'] },
-            ].map((tier) => (
-              <div key={tier.name} className={`bg-slate-800 p-8 rounded-2xl border-2 ${tier.popular ? 'border-purple-500' : 'border-slate-700'}`}>
-                {tier.popular && <span className="text-purple-500 text-sm font-medium">Most Popular</span>}
-                <h3 className="text-xl font-semibold text-white mt-2">{tier.name}</h3>
-                <div className="my-4">
-                  <span className="text-4xl font-bold text-white">{tier.price}</span>
-                  <span className="text-slate-400">/month</span>
-                </div>
-                <ul className="space-y-3 mb-8">
-                  {tier.features.map((f) => (
-                    <li key={f} className="flex items-center gap-2 text-slate-300">
-                      <Check className="w-5 h-5 text-purple-500" /> {f}
-                    </li>
-                  ))}
-                </ul>
-                <button className={`w-full py-3 rounded-lg font-medium ${tier.popular ? 'bg-purple-600 text-white' : 'bg-slate-700 text-white'}`}>
-                  Get Started
-                </button>
-              </div>
-            ))}
-          </div>
+      <section style={{maxWidth:900,margin:"0 auto",padding:"0 24px 80px"}}>
+        <h2 style={{fontSize:"clamp(22px,4vw,36px)",fontWeight:900,color:"#fff",
+          textAlign:"center",marginBottom:32}}>Everything in one place</h2>
+        <div style={{display:"grid",gridTemplateColumns:"repeat(auto-fit,minmax(240px,1fr))",gap:16}}>
+          {FEATURES.map(f=>(
+            <div key={f.title} style={{background:"rgba(255,255,255,0.03)",
+              border:"1px solid rgba(255,255,255,0.07)",borderRadius:14,padding:24}}>
+              <div style={{fontSize:32,marginBottom:12}}>{f.icon}</div>
+              <div style={{fontSize:15,fontWeight:700,color:"#fff",marginBottom:8}}>{f.title}</div>
+              <div style={{fontSize:13,color:"#6B7280",lineHeight:1.7}}>{f.desc}</div>
+            </div>
+          ))}
         </div>
       </section>
 
       {/* Footer */}
-      <footer className="py-12 px-4 border-t border-slate-700">
-        <div className="max-w-7xl mx-auto text-center">
-          <div className="flex items-center justify-center gap-2 mb-4">
-            <Tv className="w-6 h-6 text-purple-500" />
-            <span className="text-white font-semibold">Javari Entertainment</span>
-          </div>
-          <p className="text-slate-500">© 2025 CR AudioViz AI, LLC. All rights reserved.</p>
-        </div>
+      <footer style={{borderTop:"1px solid rgba(255,255,255,0.06)",padding:"32px 24px",
+        textAlign:"center",fontSize:12,color:"#374151"}}>
+        CR AudioViz AI · EIN 39-3646201 · SAM.gov UEI H5T3QG19ND91 · Fort Myers, FL<br/>
+        <a href="https://craudiovizai.com" style={{color:"#6B7280",textDecoration:"none"}}>
+          Powered by CR AudioViz AI Platform
+        </a>
       </footer>
     </div>
   );
