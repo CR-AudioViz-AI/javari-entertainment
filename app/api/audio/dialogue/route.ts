@@ -1,38 +1,26 @@
-// CRAV Movie Audio - Dialogue Search API
-// Timestamp: Tuesday, December 24, 2024
-// Purpose: Search dialogue/quotes by transcript text
+// app/api/audio/dialogue/route.ts — Javari Entertainment
+// CR AudioViz AI · EIN 39-3646201 · June 2026
 
-import { NextRequest, NextResponse } from 'next/server';
-import { searchDialogue } from '@/lib/audio-api';
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
-export async function GET(request: NextRequest) {
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
+
+export async function POST(req: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
-    const query = searchParams.get('q') || searchParams.get('query') || '';
-
-    if (!query) {
-      return NextResponse.json(
-        { error: 'Missing required query parameter: q or query' },
-        { status: 400 }
-      );
-    }
-
-    const options = {
-      movie_id: searchParams.get('movie_id') || undefined,
-      famous_only: searchParams.get('famous_only') === 'true',
-      character: searchParams.get('character') || undefined,
-      page: Number(searchParams.get('page')) || 1,
-      perPage: Number(searchParams.get('per_page')) || 20,
-    };
-
-    const result = await searchDialogue(query, options);
-
-    return NextResponse.json(result);
-  } catch (error) {
-    console.error('Dialogue search error:', error);
-    return NextResponse.json(
-      { error: 'Failed to search dialogue' },
-      { status: 500 }
+    const { query, movie, limit = 10 } = await req.json();
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
+    let q = supabase.from("audio_assets").select("*").eq("type", "dialogue").limit(limit);
+    if (query) q = q.ilike("title", `%${query}%`);
+    if (movie) q = q.ilike("source_movie", `%${movie}%`);
+    const { data, error } = await q;
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ results: data || [], total: data?.length || 0 });
+  } catch (err) {
+    return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }
