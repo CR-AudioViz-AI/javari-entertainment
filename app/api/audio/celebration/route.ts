@@ -1,43 +1,34 @@
-// CRAV Movie Audio - Celebration Sound API
-// Timestamp: Tuesday, December 24, 2024
-// Purpose: Quick endpoint for getting celebration sounds (deal closed, achievement, etc.)
+// app/api/audio/celebration/route.ts — Javari Entertainment
+// CR AudioViz AI · EIN 39-3646201 · June 2026
+// Celebration audio trigger — returns a random celebration sound for milestone events
 
-import { NextRequest, NextResponse } from 'next/server';
-import { getCelebrationSound, recordPlay } from '@/lib/audio-api';
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
-export async function GET(request: NextRequest) {
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
+
+export async function POST(req: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
-    const appId = searchParams.get('app_id');
-
-    const clip = await getCelebrationSound();
-
-    if (!clip) {
-      return NextResponse.json(
-        { error: 'No celebration sounds available' },
-        { status: 404 }
-      );
-    }
-
-    // Record the play if app_id provided
-    if (appId) {
-      await recordPlay(clip.id, appId);
-    }
-
-    return NextResponse.json({
-      audio: {
-        id: clip.id,
-        url: clip.file_url,
-        name: clip.custom_name || clip.auto_generated_name,
-        duration: clip.duration,
-        movie_title: (clip as unknown as { source_movie?: { title: string } }).source_movie?.title,
-      },
-    });
-  } catch (error) {
-    console.error('Celebration sound error:', error);
-    return NextResponse.json(
-      { error: 'Failed to get celebration sound' },
-      { status: 500 }
+    const { context } = await req.json();
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
+    const { data } = await supabase
+      .from("audio_assets")
+      .select("id, title, url, duration")
+      .eq("type", "sfx")
+      .ilike("tags", "%celebration%")
+      .limit(10);
+    
+    const assets = data || [];
+    const asset = assets[Math.floor(Math.random() * assets.length)] || null;
+    return NextResponse.json({ 
+      success: true, context, asset,
+      message: asset ? "Celebration audio ready" : "No celebration audio found"
+    });
+  } catch (err) {
+    return NextResponse.json({ success: false, error: String(err) }, { status: 500 });
   }
 }
