@@ -1,37 +1,30 @@
-// CRAV Movie Audio - Search API Route
-// Timestamp: Tuesday, December 24, 2024
+// app/api/audio/search/route.ts — Javari Entertainment
+// CR AudioViz AI · EIN 39-3646201 · June 2026
 
-import { NextRequest, NextResponse } from 'next/server';
-import { searchClips } from '@/lib/audio-api';
-import type { AudioSearchOptions } from '@/types';
+import { NextRequest, NextResponse } from "next/server";
+import { createClient } from "@supabase/supabase-js";
 
-export async function GET(request: NextRequest) {
+export const dynamic = "force-dynamic";
+export const runtime = "edge";
+
+export async function GET(req: NextRequest) {
   try {
-    const searchParams = request.nextUrl.searchParams;
-    
-    const options: AudioSearchOptions = {
-      query: searchParams.get('query') || undefined,
-      movie_id: searchParams.get('movie_id') || undefined,
-      stem_types: searchParams.get('stem_types')?.split(',') as AudioSearchOptions['stem_types'],
-      moods: searchParams.get('moods')?.split(',') as AudioSearchOptions['moods'],
-      usage_contexts: searchParams.get('usage_contexts')?.split(',') as AudioSearchOptions['usage_contexts'],
-      min_duration: searchParams.get('min_duration') ? Number(searchParams.get('min_duration')) : undefined,
-      max_duration: searchParams.get('max_duration') ? Number(searchParams.get('max_duration')) : undefined,
-      favorites_only: searchParams.get('favorites_only') === 'true',
-      page: Number(searchParams.get('page')) || 1,
-      per_page: Number(searchParams.get('per_page')) || 20,
-      sort_by: (searchParams.get('sort_by') as AudioSearchOptions['sort_by']) || 'created_at',
-      sort_order: (searchParams.get('sort_order') as AudioSearchOptions['sort_order']) || 'desc',
-    };
+    const { searchParams } = new URL(req.url);
+    const query = searchParams.get("query") || "";
+    const type  = searchParams.get("type") || "";
+    const limit = parseInt(searchParams.get("limit") || "20");
 
-    const result = await searchClips(options);
-
-    return NextResponse.json(result);
-  } catch (error) {
-    console.error('Search error:', error);
-    return NextResponse.json(
-      { error: 'Failed to search clips' },
-      { status: 500 }
+    const supabase = createClient(
+      process.env.NEXT_PUBLIC_SUPABASE_URL!,
+      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
     );
+    let q = supabase.from("audio_assets").select("*").limit(limit);
+    if (query) q = q.or(`title.ilike.%${query}%,tags.ilike.%${query}%`);
+    if (type)  q = q.eq("type", type);
+    const { data, error } = await q;
+    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ results: data || [], total: data?.length || 0 });
+  } catch (err) {
+    return NextResponse.json({ error: String(err) }, { status: 500 });
   }
 }
