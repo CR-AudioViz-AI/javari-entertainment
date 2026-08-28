@@ -4,6 +4,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { publishableKey, supabaseUrl } from "@craudioviz/platform-sdk";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -12,8 +13,8 @@ export async function POST(req: NextRequest) {
   try {
     const { context } = await req.json();
     const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      supabaseUrl(),
+      publishableKey()
     );
     const { data } = await supabase
       .from("audio_assets")
