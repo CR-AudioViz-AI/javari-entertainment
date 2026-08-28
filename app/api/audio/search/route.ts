@@ -3,6 +3,7 @@
 
 import { NextRequest, NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { publishableKey, supabaseUrl } from "@craudioviz/platform-sdk";
 
 export const dynamic = "force-dynamic";
 export const runtime = "edge";
@@ -15,8 +16,8 @@ export async function GET(req: NextRequest) {
     const limit = parseInt(searchParams.get("limit") || "20");
 
     const supabase = createClient(
-      process.env.NEXT_PUBLIC_SUPABASE_URL!,
-      process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY!
+      supabaseUrl(),
+      publishableKey()
     );
     let q = supabase.from("audio_assets").select("*").limit(limit);
     if (query) q = q.or(`title.ilike.%${query}%,tags.ilike.%${query}%`);
