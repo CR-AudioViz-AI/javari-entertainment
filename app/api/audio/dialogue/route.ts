@@ -19,7 +19,7 @@ export async function POST(req: NextRequest) {
     if (query) q = q.ilike("title", `%${query}%`);
     if (movie) q = q.ilike("source_movie", `%${movie}%`);
     const { data, error } = await q;
-    if (error) return NextResponse.json({ error: error.message }, { status: 500 });
+    if (error) return NextResponse.json({ error: 'The request could not be completed.', code: 'INTERNAL_ERROR' }, { status: 500 });
     return NextResponse.json({ results: data || [], total: data?.length || 0 });
   } catch (err) {
     return NextResponse.json({ error: String(err) }, { status: 500 });
