@@ -1,6 +1,6 @@
 {
   "installCommand": "npm install --legacy-peer-deps",
-  "buildCommand": "next build",
+  "buildCommand": "node scripts/check-sdk-install.mjs && next build",
   "env": {
     "BUILD_TIMESTAMP": "1781233654"
   }

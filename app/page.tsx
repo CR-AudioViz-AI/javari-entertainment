@@ -24,7 +24,7 @@ export default function EntertainmentPage() {
       color:"#e2e8f0",fontFamily:"system-ui,sans-serif"}}>
 
       {/* Nav */}
-      <nav style={{position:"sticky",top:0,zIndex:100,
+      <nav data-app-chrome style={{position:"sticky",top:0,zIndex:100,
         background:"rgba(13,17,23,0.95)",backdropFilter:"blur(12px)",
         borderBottom:"1px solid rgba(255,255,255,0.06)",padding:"0 24px"}}>
         <div style={{maxWidth:1200,margin:"0 auto",height:60,
@@ -123,7 +123,7 @@ export default function EntertainmentPage() {
       </section>
 
       {/* Footer */}
-      <footer style={{borderTop:"1px solid rgba(255,255,255,0.06)",padding:"32px 24px",
+      <footer data-app-chrome style={{borderTop:"1px solid rgba(255,255,255,0.06)",padding:"32px 24px",
         textAlign:"center",fontSize:12,color:"#374151"}}>
         CR AudioViz AI · EIN 39-3646201 · SAM.gov UEI H5T3QG19ND91 · Fort Myers, FL<br/>
         <a href="https://craudiovizai.com" style={{color:"#6B7280",textDecoration:"none"}}>
